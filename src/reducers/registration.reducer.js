@@ -1,14 +1,31 @@
-import { userConstants } from '../constants';
+import { userConstants } from "../constants";
 
-export function registration(state = {}, action) {
+const initialState = {
+  user: null,
+  error: null,
+  loading: false
+};
+
+export function registration(state = initialState, action) {
   switch (action.type) {
     case userConstants.REGISTER_REQUEST:
-      return { registering: true };
+      return {
+        ...state,
+        loading: true
+      };
     case userConstants.REGISTER_SUCCESS:
-      return {};
+      return {
+        ...state,
+        user: action.payload,
+        loading: false
+      };
     case userConstants.REGISTER_FAILURE:
-      return {};
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      };
     default:
-      return state
+      return state;
   }
 }

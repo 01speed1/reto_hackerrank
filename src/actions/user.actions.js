@@ -1,30 +1,48 @@
-import { userConstants } from '../constants';
-import { userService } from '../services';
-import { alertActions } from './';
-import { history } from '../helpers';
+import { userConstants } from "../constants";
+import { userService } from "../services";
+import { alertActions } from "./";
+import { history } from "../helpers";
 
-export const userActions = {
-    login,
-    logout,
-    register
+export const login = (username, password) => {
+  // return the promise using fetch which adds to localstorage on resolve
+
+  function request(user) {
+    return { type: userConstants.LOGIN_REQUEST, user };
+  }
+  function success(user) {
+    return { type: userConstants.LOGIN_SUCCESS, user };
+  }
+  function failure(error) {
+    return { type: userConstants.LOGIN_FAILURE, error };
+  }
 };
 
-function login(username, password) {
-    // return the promise using fetch which adds to localstorage on resolve
+export const logout = () => {
+  // complete this function
+};
 
-    function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
-    function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
-}
+export const register = user => dispatch => {
+  // return the promise using fetch which dispatches appropriately
+  dispatch(setLoading());
 
-function logout() {
-    // complete this function
-}
+  userService
+    .register(user)
+    .then(data =>
+      dispatch({
+        type: userConstants.REGISTER_SUCCESS,
+        data: data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: userConstants.REGISTER_FAILURE,
+        data: err
+      })
+    );
+};
 
-function register(user) {
-    // return the promise using fetch which dispatches appropriately 
-
-    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
-    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
-}
+export const setLoading = () => {
+  return {
+    type: userConstants.REGISTER_REQUEST
+  };
+};
